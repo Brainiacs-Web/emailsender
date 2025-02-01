@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Sender</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        input, textarea, button { display: block; margin: 10px 0; width: 100%; padding: 10px; }
+        ul { list-style: none; padding: 0; }
+        li { display: flex; align-items: center; gap: 10px; }
+    </style>
+</head>
+<body>
+
+    <h2>Send Multiple Emails</h2>
+    <label>Sender Email:</label>
+    <input type="email" id="senderEmail" placeholder="Enter your email">
+
+    <label>Message:</label>
+    <textarea id="message" placeholder="Enter your message"></textarea>
+
+    <label>Add Recipient Email:</label>
+    <input type="email" id="recipientEmail" placeholder="Enter recipient email">
+    <button onclick="addRecipient()">Add Email</button>
+
+    <h3>Recipient Emails:</h3>
+    <ul id="emailList"></ul>
+
+    <button onclick="sendEmails()">Send Emails</button>
+
+    <script>
+        let recipients = [];
+
+        function addRecipient() {
+            const emailInput = document.getElementById("recipientEmail");
+            const email = emailInput.value.trim();
+
+            if (email && !recipients.includes(email)) {
+                recipients.push(email);
+                updateRecipientList();
+                emailInput.value = ""; // Clear input
+            }
+        }
+
+        function updateRecipientList() {
+            const emailList = document.getElementById("emailList");
+            emailList.innerHTML = ""; // Clear the list
+            recipients.forEach((email, index) => {
+                const li = document.createElement("li");
+                li.innerHTML = `
+                    <input type="checkbox" id="email${index}" value="${email}">
+                    <label for="email${index}">${email}</label>
+                `;
+                emailList.appendChild(li);
+            });
+        }
+
+        function sendEmails() {
+            const senderEmail = document.getElementById("senderEmail").value.trim();
+            const message = document.getElementById("message").value.trim();
+            const selectedEmails = [];
+
+            document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
+                selectedEmails.push(checkbox.value);
+            });
+
+            if (!senderEmail || !message || selectedEmails.length === 0) {
+                alert("Please fill all fields and select at least one recipient.");
+                return;
+            }
+
+            fetch("http://localhost:5000/send-email", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    senderEmail: senderEmail,
+                    recipients: selectedEmails,
+                    message: message
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) alert("Emails sent successfully!");
+                else alert("Error: " + data.error);
+            })
+            .catch(error => alert("Error: " + error));
+        }
+    </script>
+
+</body>
+</html>
