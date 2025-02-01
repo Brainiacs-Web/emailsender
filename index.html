@@ -5,29 +5,157 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Email Sender</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 40px; }
-        input, textarea, button { display: block; margin: 10px 0; width: 100%; padding: 10px; }
-        ul { list-style: none; padding: 0; }
-        li { display: flex; align-items: center; gap: 10px; }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #121212;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            background-color: #1f1f1f;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        label {
+            font-size: 16px;
+            margin-bottom: 5px;
+            display: block;
+            color: #bbb;
+        }
+
+        input, textarea, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #444;
+            border-radius: 4px;
+            background-color: #2a2a2a;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        input:focus, textarea:focus, button:focus {
+            outline: none;
+            border-color: #3e8e41;
+        }
+
+        textarea {
+            height: 150px;
+        }
+
+        button {
+            cursor: pointer;
+            background-color: #333;
+            border: 1px solid #444;
+            color: #fff;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #444;
+        }
+
+        h3 {
+            font-size: 18px;
+            margin-top: 20px;
+            color: #ddd;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #333;
+        }
+
+        footer {
+            margin-top: 30px;
+            font-size: 14px;
+            text-align: center;
+            color: #bbb;
+        }
+
+        /* Mobile responsiveness */
+        @media screen and (max-width: 600px) {
+            .container {
+                padding: 20px;
+                width: 95%;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            label, input, textarea, button {
+                font-size: 14px;
+            }
+
+            textarea {
+                height: 120px;
+            }
+
+            button {
+                font-size: 14px;
+                padding: 12px;
+            }
+        }
+
     </style>
 </head>
 <body>
 
-    <h2>Send Multiple Emails</h2>
-    <label>Sender Email:</label>
-    <input type="email" id="senderEmail" placeholder="Enter your email">
+    <div class="container">
+        <h2>Send Multiple Emails</h2>
 
-    <label>Message:</label>
-    <textarea id="message" placeholder="Enter your message"></textarea>
+        <label for="senderEmail">Sender Email:</label>
+        <input type="email" id="senderEmail" placeholder="Enter your email">
 
-    <label>Add Recipient Email:</label>
-    <input type="email" id="recipientEmail" placeholder="Enter recipient email">
-    <button onclick="addRecipient()">Add Email</button>
+        <label for="message">Message:</label>
+        <textarea id="message" placeholder="Enter your message"></textarea>
 
-    <h3>Recipient Emails:</h3>
-    <ul id="emailList"></ul>
+        <label for="recipientEmail">Add Recipient Email:</label>
+        <input type="email" id="recipientEmail" placeholder="Enter recipient email">
+        <button onclick="addRecipient()">Add Email</button>
 
-    <button onclick="sendEmails()">Send Emails</button>
+        <h3>Recipient Emails:</h3>
+        <ul id="emailList"></ul>
+
+        <button onclick="sendEmails()">Send Emails</button>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Email Sender. All Rights Reserved.</p>
+    </footer>
 
     <script>
         let recipients = [];
@@ -48,7 +176,7 @@
             emailList.innerHTML = ""; // Clear the list
             recipients.forEach((email, index) => {
                 const li = document.createElement("li");
-                li.innerHTML = `
+                li.innerHTML = ` 
                     <input type="checkbox" id="email${index}" value="${email}">
                     <label for="email${index}">${email}</label>
                 `;
